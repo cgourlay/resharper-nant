@@ -1,19 +1,18 @@
 resharper-nant
 ==============
 
-A plugin for ReSharper v8.1.23.546 that adds support for NAnt.
+A ReSharper plugin that adds support for NAnt.
 
 What does it do?
 ================
 
-TODO: CG to complete...
+Provides context actions whilst authoring NAnt build scripts.
 
-How do I get it?
-================
+System requirements
+===================
 
-TODO: CG to complete...
-
-Building
-========
-
-TODO: CG to complete...
+Visual Studio 2013 Professional Edition
+ReSharper v8.2.0.2160
+ReSharper SDK v8.2
+NuGet
+.Net Framework v4.0 (distribution of the plugin is is intended to be a NuGet based extension)
