@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JetBrains.ReSharper.Features.Shared</name>
+    </assembly>
+    <members>
+        <member name="T:JetBrains.CommonControls.ActiveRichText.FontInfo">
+            <summary>
+            Font information
+            </summary>
+        </member>
+        <member name="T:JetBrains.CommonControls.ActiveRichText.FormattedText">
+            <summary>
+            Text markup
+            </summary>
+        </member>
+        <member name="P:JetBrains.CommonControls.ActiveRichText.FormattedText.Lines">
+            <summary>
+            Gets array of lines to paint
+            </summary>
+        </member>
+        <member name="T:JetBrains.CommonControls.ActiveRichText.IActiveText">
+            <summary>
+            Represents an active text
+            </summary>
+        </member>
+        <member name="M:JetBrains.CommonControls.ActiveRichText.IActiveText.Paint(System.Windows.Forms.PaintEventArgs)">
+            <summary>
+            Paint the text
+            </summary>
+        </member>
+        <member name="M:JetBrains.CommonControls.ActiveRichText.IActiveText.CalculateHeight(System.Drawing.Graphics,System.Int32)">
+            <summary>
+            Gets text full height
+            </summary>
+        </member>
+        <member name="M:JetBrains.CommonControls.ActiveRichText.IActiveText.NotifyMouseMove(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Notify active text about mouse move
+            </summary>
+        </member>
+        <member name="M:JetBrains.CommonControls.ActiveRichText.IActiveText.GetAnchor(System.Drawing.Point)">
+            <summary>
+            Gets currently hovered anchor
+            </summary>
+        </member>
+        <member name="P:JetBrains.CommonControls.ActiveRichText.IActiveText.ColorScheme">
+            <summary>
+            Gets or sets color scheme
+            </summary>
+        </member>
+        <member name="P:JetBrains.CommonControls.ActiveRichText.IActiveText.Content">
+            <summary>
+            Gets or sets content
+            </summary>
+        </member>
+        <member name="P:JetBrains.CommonControls.ActiveRichText.IActiveText.DefaultFont">
+            <summary>
+            Gets or sets default font for text
+            </summary>
+        </member>
+        <member name="T:JetBrains.CommonControls.ActiveRichText.Impl.TextMarkup">
+            <summary>
+            Summary description for MarkupModel.
+            </summary>
+        </member>
+        <member name="T:JetBrains.CommonControls.ActiveRichText.TextLine">
+            <summary>
+            Line of text
+            </summary>
+        </member>
+        <member name="T:JetBrains.CommonControls.ActiveRichText.TextPart">
+            <summary>
+            Part of text line with common text attributes
+            </summary>
+        </member>
+        <member name="T:JetBrains.ReSharper.Features.Shared.StackTrace.ExceptionVisualizerInstaller">
+            <summary>
+            Makes the <c>ExceptionVisualizer</c> DLL class deploy to Visual Studio on install.
+            </summary>
+        </member>
+        <member name="M:JetBrains.ReSharper.Features.Shared.StackTrace.ExceptionVisualizerInstaller.JetBrains#Application#Install#IStaticInstaller#InstallStatic(JetBrains.Application.Install.Installer)">
+            <summary>
+            Called once on the object during the registration process.
+            </summary>
+            <param name="installer">The installer object that provides the installation data.</param>
+            <returns>The list of the Registry entries to write, or <c>Null</c> if none.</returns>
+        </member>
+        <member name="P:JetBrains.ReSharper.Features.Shared.StackTrace.StackTraceViewAvalonControl.Text">
+            <summary>
+            Gets or sets stack trace raw text
+            </summary>
+        </member>
+    </members>
+</doc>

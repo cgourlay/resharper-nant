@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project="Plugin.Targets" Condition="$(ReSharperSdkMode) != 'Tests'" />
+  <Import Project="Plugin.Tests.Targets" Condition="$(ReSharperSdkMode) == 'Tests'" />
+  
+  <Import Project="$(ReSharperSdkTools)\MSBuild\JetBrains.Build.Platform.ThemedIconsConverter.Targets" Condition="$(ReSharperSdkMode) != 'Tests' AND Exists('$(ReSharperSdkTools)\MSBuild\JetBrains.Build.Platform.ThemedIconsConverter.Targets')" />
+  <Import Project="$(ReSharperSdkTools)\PsiGen\PsiGen.Targets" Condition="$(ReSharperSdkMode) != 'Tests' AND Exists('$(ReSharperSdkTools)\PsiGen\PsiGen.Targets')" />
+  <Import Project="$(ReSharperSdkTools)\PsiGen\CsLex.Targets" Condition="$(ReSharperSdkMode) != 'Tests' AND Exists('$(ReSharperSdkTools)\PsiGen\CsLex.Targets')" />
+
+</Project>

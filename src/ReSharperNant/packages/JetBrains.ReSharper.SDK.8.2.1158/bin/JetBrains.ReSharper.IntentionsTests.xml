@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JetBrains.ReSharper.IntentionsTests</name>
+    </assembly>
+    <members>
+        <member name="T:ReSharperTestEnvironmentAssembly_IntentionsTests">
+            <summary>
+              Must be in the global namespace.
+            </summary>
+        </member>
+        <member name="P:JetBrains.ReSharper.IntentionsTests.Navigation.AllNavigationProvidersTestBase.SearchPattern">
+            <summary>
+            Affects only FindUsagesAdvancedProvider
+            </summary>
+        </member>
+    </members>
+</doc>

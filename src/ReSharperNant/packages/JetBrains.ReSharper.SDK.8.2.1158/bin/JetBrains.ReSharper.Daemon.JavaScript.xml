@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JetBrains.ReSharper.Daemon.JavaScript</name>
+    </assembly>
+    <members>
+        <member name="T:JetBrains.ReSharper.Daemon.JavaScript.Stages.JSon.JsonIdentifierHighlighterProcess">
+            <summary>
+            Unfortunately we cannot have the same class process for different stages (because there is indexing by type), 
+            so we need different one
+            </summary>
+        </member>
+        <member name="M:JetBrains.ReSharper.Daemon.JavaScript.Stages.TypeScript.Util.TsResolveDaemonUtil.GetDeclarationsCount(JetBrains.ReSharper.Psi.IDeclaredElement)">
+            <summary>
+            Fast, relies on symbols only, doesn't calculate declarations themselves
+            </summary>
+            <param name="element"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JetBrains.ReSharper.Daemon.JavaScript.Stages.TypeScript.Util.TsResolveDaemonUtil.GetNonDeclarationSymbolsCount(JetBrains.ReSharper.Psi.IDeclaredElement)">
+            <summary>
+            Fast, relies on symbols only, doesn't calculate declarations themselves
+            </summary>
+            <param name="element"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JetBrains.ReSharper.Daemon.JavaScript.Stages.TypeScript.Util.TsResolveDaemonUtil.GetDeclarationsCountExcept(JetBrains.ReSharper.Psi.IDeclaredElement,JetBrains.ReSharper.Psi.Tree.IDeclaration)">
+            <summary>
+            Fast, relies on symbols only
+            Calculates declarations count except specified item
+            </summary>
+            <param name="element"></param>
+            <returns></returns>
+        </member>
+        <member name="T:JetBrains.ReSharper.Daemon.JavaScript.Util.JavaScriptIdentifierHighlighter.IJavaScriptIdentifierHighlighter">
+            <summary>
+            Language specialization of the highlighter
+            </summary>
+        </member>
+    </members>
+</doc>

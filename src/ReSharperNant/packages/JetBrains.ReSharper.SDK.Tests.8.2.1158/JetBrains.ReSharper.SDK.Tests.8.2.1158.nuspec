@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
+  <metadata minClientVersion="2.7">
+    <id>JetBrains.ReSharper.SDK.Tests</id>
+    <version>8.2.1158</version>
+    <title>JetBrains ReSharper 8.2 SDK Tests</title>
+    <authors>JetBrains</authors>
+    <owners>JetBrains</owners>
+    <licenseUrl>http://confluence.jetbrains.com/display/NETCOM/JetBrains+ReSharper+SDK+License+Agreement</licenseUrl>
+    <projectUrl>http://confluence.jetbrains.com/display/NETCOM/ReSharper+8+Plugin+Development</projectUrl>
+    <iconUrl>http://resharper-plugins.jetbrains.com/Content/Images/packageReSharper.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>SDK to enable building plugins for JetBrains ReSharper 8.2. Contains reference assemblies, msbuild targets and necessary build tools.</description>
+    <copyright>Copyright © JetBrains 2014</copyright>
+    <tags>JetBrains ReSharper SDK Plugin</tags>
+    <dependencies>
+      <dependency id="JetBrains.ReSharper.SDK" version="8.2.1158" />
+    </dependencies>
+  </metadata>
+</package>

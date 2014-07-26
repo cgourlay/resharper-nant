@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReSharperNant", "ReSharperNant\ReSharperNant\ReSharperNant.csproj", "{8553BD8C-6300-44ED-BC4A-773D7F2D1599}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReSharperNant.Tests", "ReSharperNant\ReSharperNant.Tests\ReSharperNant.Tests.csproj", "{0D86FF25-E64D-49A8-B20E-59723040B863}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8553BD8C-6300-44ED-BC4A-773D7F2D1599}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8553BD8C-6300-44ED-BC4A-773D7F2D1599}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8553BD8C-6300-44ED-BC4A-773D7F2D1599}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8553BD8C-6300-44ED-BC4A-773D7F2D1599}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D86FF25-E64D-49A8-B20E-59723040B863}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D86FF25-E64D-49A8-B20E-59723040B863}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D86FF25-E64D-49A8-B20E-59723040B863}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D86FF25-E64D-49A8-B20E-59723040B863}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

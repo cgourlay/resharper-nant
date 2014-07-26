@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JetBrains.ReSharper.ExtendedTestFramework</name>
+    </assembly>
+    <members>
+        <member name="M:JetBrains.ReSharper.PsiTests.Asp.TestMvcAttribute.GetReferences(JetBrains.ProjectModel.PlatformID)">
+            <remarks>Due to bug RSRP-378399 we need to provide System reference first</remarks>
+        </member>
+    </members>
+</doc>

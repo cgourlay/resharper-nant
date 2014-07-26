@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JetBrains.ReSharper.Psi.Services.JavaScript</name>
+    </assembly>
+    <members>
+        <member name="T:JetBrains.ReSharper.Psi.Services.JavaScript.StructuralSearch.Matchers.CompoundOrSimpleExpressionMatcher">
+            <summary>
+            wrapper for simple expression matcher
+            </summary>
+        </member>
+        <member name="T:JetBrains.ReSharper.Psi.Services.JavaScript.StructuralSearch.Matchers.StatementOrBlockMatcher">
+            <summary>
+            wrapper for no block statement matcher
+            </summary>
+        </member>
+    </members>
+</doc>

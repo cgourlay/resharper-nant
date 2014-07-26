@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JetBrains.Platform.ReSharper.TextControl.TestFramework</name>
+    </assembly>
+    <members>
+        <member name="T:JetBrains.Platform.Tests.TextControl.Components.TestImplStandaloneTextControlSwitchingGraphicsProvider">
+            <summary>
+            Overrides graphics provider with the tests instance.
+            </summary>
+        </member>
+        <member name="T:JetBrains.TestFramework.TextControl.TestTextControlFocusSupport">
+            <summary>
+            <see cref="T:JetBrains.TextControl.Impl.TextControlImpl"/> relies on WinForms for focus management in real life.
+            In tests, we emulate this by manually applying focus whenever smb attempts to change it.
+            </summary>
+        </member>
+    </members>
+</doc>
