@@ -1,0 +1,1440 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>yWorks.yFilesWPF.Adapter</name>
+  </assembly>
+  <members>
+    <member name="T:yWorks.yFiles.UI.Animation.LayoutMorpherWrapper">
+      <summary>
+            Convenience class that wraps LayoutMorpher for use with LayoutGraphs
+            </summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Animation.LayoutMorpherWrapper.#ctor(yWorks.yFiles.UI.Model.IGraph,yWorks.yFiles.Layout.CopiedLayoutGraph,System.TimeSpan)">
+      <summary>
+            Creates a new LayoutMorpherWrapper instance that can be directly used together
+            with a <see cref="T:yWorks.yFiles.Layout.CopiedLayoutGraph" /> instance
+            </summary>
+      <param name="graph">the graph for which the layout should be animated</param>
+      <param name="lg">the <see cref="T:yWorks.yFiles.Layout.CopiedLayoutGraph" /> that contains all target layout information</param>
+      <param name="preferredDuration">the preferred duration of the animation in milliseconds</param>
+      <remarks>This constructor is suitable for morphing an <see cref="T:yWorks.yFiles.UI.Model.IGraph" /> to a layout computed
+            by one of the layout algorithms.
+            <code>
+            LayoutGraphAdapter adapter = new LayoutGraphAdapter(graph);
+            OrthogonalLayouter layouter = new OrthogonalLayouter();
+            GraphLayout layout = layouter.calcLayout(adapter, adapter);
+            LayoutMorpherWrapper morpher = LayoutMorpherWrapper(graph, layout, adapter, TimeSpan.FromSeconds(1));
+            </code>
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Animation.LayoutMorpherWrapper.#ctor(yWorks.yFiles.UI.Model.IGraph,yWorks.yFiles.Layout.IGraphLayout,System.TimeSpan)">
+      <summary>
+            Creates a new LayoutMorpherWrapper instance.
+            </summary>
+      <param name="graph">the graph for which the layout should be animated</param>
+      <param name="layout">the target layout with respect to layoutGraph</param>
+      <param name="preferredDuration">the preferred duration of the animation.</param>
+      <remarks>This constructor is suitable for morphing an <see cref="T:yWorks.yFiles.UI.Model.IGraph" /> to a layout computed
+            by one of the layout algorithms.
+            <code>
+            LayoutGraphAdapter adapter = new LayoutGraphAdapter(graph);
+            OrthogonalLayouter layouter = new OrthogonalLayouter();
+            IGraphLayout layout = layouter.CalcLayout(adapter, adapter);
+            LayoutMorpherWrapper morpher = LayoutMorpherWrapper(graph, layout, TimeSpane.FromSeconds(1));
+            </code>
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Animation.LayoutMorpherWrapper.Animate(System.Double)">
+      <summary>
+            changes the graph layout according to the given time value.
+            </summary>
+      <param name="time">the relative time for the animation [0, 1]</param>
+      <remarks>The animation starts at time 0 and ends at 1. Calls of this
+            method have no effect unless <see cref="M:yWorks.yFiles.UI.Animation.LayoutMorpherWrapper.Initialize" /> is called once before.
+            After the last call of this method <see cref="M:yWorks.yFiles.UI.Animation.LayoutMorpherWrapper.Cleanup" /> should be called once.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Animation.LayoutMorpherWrapper.Cleanup">
+      <summary>
+            does a clean up after the animation.
+            </summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Animation.LayoutMorpherWrapper.Initialize">
+      <summary>
+            initializes the animation.
+            </summary>
+      <remarks>This method has to be called once before the first call
+            to <see cref="M:yWorks.yFiles.UI.Animation.LayoutMorpherWrapper.Animate(System.Double)" />.</remarks>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Animation.LayoutMorpherWrapper.PreferredDuration">
+      <summary>
+            gets the preferred duration in milliseconds.
+            </summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Animation.LayoutMorpherWrapper.Run(yWorks.yFiles.UI.GraphControl)">
+      <summary>
+            Convenience method that instantiates a new <see cref="T:yWorks.Canvas.Animation.Animator" />
+            for the given control and <see cref="M:yWorks.Canvas.Animation.Animator.Animate(yWorks.Canvas.Animation.IAnimation)">animates</see> this.
+            </summary>
+      <param name="control">The control to pass to the animator instance.</param>
+    </member>
+    <member name="T:yWorks.yFiles.UI.Model.CopiedLayoutIGraph">
+      <summary>
+            A <see cref="T:yWorks.yFiles.Layout.CopiedLayoutGraph" /> variant that can be initialized using an <see cref="T:yWorks.yFiles.UI.Model.IGraph" />.
+            </summary>
+      <remarks>
+            Using this class, the various layout algorithms can be used to calculate an automatic layout
+            for an <see cref="T:yWorks.yFiles.UI.Model.IGraph" />:
+            <code>
+                // graph is of type yWorks.yFiles.UI.Model.IGraph
+                // and layouter is of type yWorks.yFiles.Layout.ILayouter
+                graph.ApplyLayout(layouter);
+            </code>
+            which makes use of an extension method and is identical to this:
+            <code>
+                // graph is of type yWorks.yFiles.UI.Model.IGraph
+                // and layouter is of type yWorks.yFiles.Layout.ILayouter
+                CopiedLayoutIGraph.ApplyLayout(graph, layouter);
+            </code>
+            which is basically the same as writing:
+            <code>
+                // build the adapter copy, graph is of type yWorks.yFiles.UI.Model.IGraph
+                CopiedLayoutIGraph copy = new CopiedLayoutIGraph(graph);
+            
+                // perform the layout on the copy - layouter is of type yWorks.yFiles.Layout.ILayouter
+                layouter.DoLayout(copy);
+                
+                // apply the results to the original IGraph
+                copy.CommitLayoutToOriginalGraph();
+            </code>
+            For more control over the adapting process, see the <see cref="T:yWorks.yFiles.UI.Model.LayoutGraphAdapter" /> class.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.CopiedLayoutIGraph.#ctor(yWorks.yFiles.UI.Model.IGraph)">
+      <summary>
+            Create a new instance using the given graph.
+            </summary>
+      <param name="graph">The graph to initialize this instance from.</param>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.CopiedLayoutIGraph.#ctor(yWorks.yFiles.UI.Model.LayoutGraphAdapter)">
+      <summary>
+            Create a new instance of this graph using the provided adapter.
+            </summary>
+      <param name="adapter">The adapter that has been used to convert the <see cref="T:yWorks.yFiles.UI.Model.IGraph" />.</param>
+      <remarks>
+            This constructor is useful when customizations need to be made on <see cref="T:yWorks.yFiles.UI.Model.LayoutGraphAdapter" />.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.CopiedLayoutIGraph.ApplyLayout(yWorks.yFiles.UI.Model.IGraph,yWorks.yFiles.Layout.ILayouter)">
+      <summary>
+            Static convenience method that applies a <see cref="T:yWorks.yFiles.Layout.ILayouter">layout algorithm</see>
+            to an <see cref="T:yWorks.yFiles.UI.Model.IGraph" />.
+            </summary>
+      <param name="layouter">The layout algorithm to apply.</param>
+      <param name="graph">The graph to compute the layout on.</param>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.CopiedLayoutIGraph.CommitLayoutToOriginalGraph">
+      <summary>
+            Overrides the base method to temporarily turn off <see cref="P:yWorks.yFiles.UI.Model.IGroupedGraph.AutoAdjustGroupNodeBounds" />
+            so that the group node bounds don't get messed up.
+            </summary>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.CopiedLayoutIGraph.SelectionModel">
+      <summary>
+            Get or set the selection model to use for the <see cref="F:yWorks.yFiles.Layout.LayouterKeys.SelectedNodesDpKey" /> and
+            <see cref="F:yWorks.yFiles.Layout.LayouterKeys.SelectedEdgesDpKey" /> data provider implementations that are automatically
+            bound to this instance.
+            </summary>
+    </member>
+    <member name="T:yWorks.yFiles.UI.Model.DataMapAdapter`2">
+      <summary>
+            An adapter implementation that wraps an <see cref="T:yWorks.Canvas.Model.IMapper`2" /> to 
+            an <see cref="T:yWorks.yFiles.Algorithms.IDataMap" />.
+            </summary>
+      <typeparam name="K">The type of the key for the mapper.</typeparam>
+      <typeparam name="V">The type of the value for the mapper.</typeparam>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.DataMapAdapter`2.#ctor(yWorks.Canvas.Model.IMapper{`0,`1})">
+      <summary>
+            Initializes a new instance of the <see cref="T:yWorks.yFiles.UI.Model.DataMapAdapter`2" /> class.
+            </summary>
+      <param name="mapper">The mapper to adapt.</param>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.DataMapAdapter`2.Set(System.Object,System.Object)" />
+    <member name="M:yWorks.yFiles.UI.Model.DataMapAdapter`2.SetBool(System.Object,System.Boolean)" />
+    <member name="M:yWorks.yFiles.UI.Model.DataMapAdapter`2.SetDouble(System.Object,System.Double)" />
+    <member name="M:yWorks.yFiles.UI.Model.DataMapAdapter`2.SetInt(System.Object,System.Int32)" />
+    <member name="T:yWorks.yFiles.UI.Model.DataProviderAdapter`2">
+      <summary>
+            An adapter implementation that wraps an <see cref="T:yWorks.Canvas.Model.IMapper`2" /> to 
+            an <see cref="T:yWorks.yFiles.Algorithms.IDataProvider" />.
+            </summary>
+      <typeparam name="K">The type of the key for the mapper.</typeparam>
+      <typeparam name="V">The type of the value for the mapper.</typeparam>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.DataProviderAdapter`2.#ctor(yWorks.Canvas.Model.IMapper{`0,`1})">
+      <summary>
+            Creates a new instance that adapts the provided mapper instance.
+            </summary>
+      <param name="mapper">The mapper to adapt.</param>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.DataProviderAdapter`2.Get(System.Object)">
+      <summary>Returns an object value associated with the given data holder.</summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.DataProviderAdapter`2.GetBool(System.Object)">
+      <summary>Returns a boolean value associated with the given data holder.</summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.DataProviderAdapter`2.GetDouble(System.Object)">
+      <summary>Returns a double value associated with the given data holder.</summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.DataProviderAdapter`2.GetInt(System.Object)">
+      <summary>Returns an integer value associated with the given data holder.</summary>
+    </member>
+    <member name="T:yWorks.yFiles.UI.Model.ExtendedEdgeLabelCandidate">
+      <summary>
+            A subclass of <see cref="T:yWorks.yFiles.Layout.EdgeLabelCandidate" /> that provides a 
+            <see cref="T:yWorks.yFiles.UI.Model.ILabelCandidateDescriptor">candidate descriptor</see></summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.ExtendedEdgeLabelCandidate.#ctor(yWorks.yFiles.Algorithms.Geometry.YOrientedRectangle,System.Object,yWorks.yFiles.Layout.IEdgeLabelLayout,System.Boolean,yWorks.yFiles.UI.Model.ILabelCandidateDescriptor)">
+      <summary>Returns a new instance of ExtendedEdgeLabelCandidate.</summary>
+      <param name="orientedBox">the label size and orientation</param>
+      <param name="param">
+            the parameters of the labeling model
+            associated with this candidate.
+            </param>
+      <param name="owner">the label associated to the candidate.</param>
+      <param name="internal">
+            flag whether the candidate is
+            allowed to overlap the layout of the edge.
+            </param>
+      <param name="descriptor">the label candidate descriptor.</param>
+      <remarks>Returns a new instance of ExtendedEdgeLabelCandidate.</remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.ExtendedEdgeLabelCandidate.#ctor(yWorks.yFiles.Algorithms.Geometry.YPoint,yWorks.yFiles.Algorithms.Geometry.YDimension,System.Object,yWorks.yFiles.Layout.IEdgeLabelLayout,System.Boolean,yWorks.yFiles.UI.Model.ILabelCandidateDescriptor)">
+      <summary>Returns a new instance of ExtendedEdgeLabelCandidate.</summary>
+      <param name="pos">
+            the location of the upper
+            left corner of the candidate.
+            </param>
+      <param name="size">the size of the candidate.</param>
+      <param name="param">
+            the parameters of the labeling model
+            associated with this candidate.
+            </param>
+      <param name="owner">the label associated to the candidate.</param>
+      <param name="internal">
+            flag whether the candidate is
+            allowed to overlap the layout of the edge.
+            </param>
+      <param name="descriptor">the label candidate descriptor.</param>
+      <remarks>Returns a new instance of ExtendedEdgeLabelCandidate.</remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.ExtendedEdgeLabelCandidate.#ctor(yWorks.yFiles.Algorithms.Geometry.YPoint,yWorks.yFiles.Algorithms.Geometry.YDimension,System.Object,yWorks.yFiles.Layout.IEdgeLabelLayout,yWorks.yFiles.UI.Model.ILabelCandidateDescriptor)">
+      <summary>Returns a new instance of ExtendedEdgeLabelCandidate.</summary>
+      <param name="pos">
+            the location of the upper
+            left corner of the candidate.
+            </param>
+      <param name="size">the size of the candidate.</param>
+      <param name="param">
+            the parameters of the labeling model
+            associated with this candidate.
+            </param>
+      <param name="owner">the label associated to the candidate.</param>
+      <param name="descriptor">the label candidate descriptor.</param>
+      <remarks>Returns a new instance of ExtendedEdgeLabelCandidate.</remarks>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.ExtendedEdgeLabelCandidate.Descriptor">
+      <summary>
+            Gets the label candidate descriptor.
+            </summary>
+    </member>
+    <member name="T:yWorks.yFiles.UI.Model.ExtendedLabelCandidateProfitModel">
+      <summary>
+            An implementation of <see cref="T:yWorks.yFiles.Layout.IProfitModel" /> that returns the 
+            profit of a label candidate for instances of <see cref="T:yWorks.yFiles.UI.Model.ExtendedNodeLabelCandidate" />.
+            </summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.ExtendedLabelCandidateProfitModel.#ctor">
+      <summary>Initializes a new instance of the <see cref="T:yWorks.yFiles.UI.Model.ExtendedLabelCandidateProfitModel" /> class</summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.ExtendedLabelCandidateProfitModel.GetProfit(yWorks.yFiles.Layout.LabelCandidate)">
+      <summary>Returns the profit for placing a label-candidate.</summary>
+      <param name="candidate">a label candidate</param>
+      <returns>a value between 0 and 1.</returns>
+      <remarks>
+            This implementation returns the profit for instances of 
+            <see cref="T:yWorks.yFiles.UI.Model.ExtendedNodeLabelCandidate" /> or 0.0 for other 
+            <see cref="T:yWorks.yFiles.Layout.LabelCandidate" />s.
+            </remarks>
+    </member>
+    <member name="T:yWorks.yFiles.UI.Model.ExtendedNodeLabelCandidate">
+      <summary>
+            A subclass of <see cref="T:yWorks.yFiles.Layout.NodeLabelCandidate" /> that provides a 
+            <see cref="T:yWorks.yFiles.UI.Model.ILabelCandidateDescriptor">candidate descriptor</see></summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.ExtendedNodeLabelCandidate.#ctor(yWorks.yFiles.Algorithms.Geometry.YOrientedRectangle,System.Object,yWorks.yFiles.Layout.INodeLabelLayout,System.Boolean,yWorks.yFiles.UI.Model.ILabelCandidateDescriptor)">
+      <summary>Returns a new instance of NodeLabelCandidate.</summary>
+      <param name="orientedBox">the label size and orientation</param>
+      <param name="param">the parameters of the labeling model associated with this candidate.</param>
+      <param name="owner">the label associated to the candidate.</param>
+      <param name="internal">
+            flag whether the candidate is inside the node,
+            or outside.
+            </param>
+      <param name="descriptor">the label candidate descriptor.</param>
+      <remarks>Returns a new instance of NodeLabelCandidate.</remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.ExtendedNodeLabelCandidate.#ctor(yWorks.yFiles.Algorithms.Geometry.YPoint,yWorks.yFiles.Algorithms.Geometry.YDimension,System.Object,yWorks.yFiles.Layout.INodeLabelLayout,System.Boolean,yWorks.yFiles.UI.Model.ILabelCandidateDescriptor)">
+      <summary>Returns a new instance of NodeLabelCandidate.</summary>
+      <param name="pos">
+            the location of the upper
+            left corner of the candidate.
+            </param>
+      <param name="size">the size of the candidate.</param>
+      <param name="param">
+            the parameters of the labeling model
+            associated with this candidate.
+            </param>
+      <param name="owner">the label associated to the candidate.</param>
+      <param name="internal">
+            flag whether the candidate is inside the node,
+            or outside.
+            </param>
+      <param name="descriptor">the label candidate descriptor.</param>
+      <remarks>Returns a new instance of NodeLabelCandidate.</remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.ExtendedNodeLabelCandidate.#ctor(yWorks.yFiles.Algorithms.Geometry.YPoint,yWorks.yFiles.Algorithms.Geometry.YDimension,System.Object,yWorks.yFiles.Layout.INodeLabelLayout,yWorks.yFiles.UI.Model.ILabelCandidateDescriptor)">
+      <summary>Returns a new instance of ExtendedNodeLabelCandidate.</summary>
+      <param name="pos">
+            the location of the upper
+            left corner of the candidate.
+            </param>
+      <param name="size">the size of the candidate.</param>
+      <param name="param">
+            the parameters of the labeling model
+            associated with this candidate.
+            </param>
+      <param name="owner">the label associated to the candidate.</param>
+      <param name="descriptor">the label candidate descriptor.</param>
+      <remarks>Returns a new instance of ExtendedNodeLabelCandidate.</remarks>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.ExtendedNodeLabelCandidate.Descriptor">
+      <summary>
+            Gets the label candidate descriptor.
+            </summary>
+    </member>
+    <member name="T:yWorks.yFiles.UI.Model.LayoutExceptionEventArgs">
+      <summary>
+            This event argument is used by <see cref="P:yWorks.yFiles.UI.Model.LayoutExecutor.FinishHandler" /> if an exception happened during the execution.
+            </summary>
+      <remarks>
+            For backwards compatibility this exception extends <see cref="T:System.ComponentModel.CancelEventArgs" />.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExceptionEventArgs.#ctor(System.Exception)">
+      <summary>
+            Initializes a new instance of the <see cref="T:yWorks.yFiles.UI.Model.LayoutExceptionEventArgs" /> class.
+            </summary>
+      <param name="exception">The exception to pass to <see cref="P:yWorks.yFiles.UI.Model.LayoutExceptionEventArgs.Exception" />.</param>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.LayoutExceptionEventArgs.Exception">
+      <summary>
+            Gets the exception this event is signaling.
+            </summary>
+    </member>
+    <member name="T:yWorks.yFiles.UI.Model.LayoutExecutor">
+      <summary>
+            A helper class that can be used to execute a <see cref="T:yWorks.yFiles.Layout.ILayouter" />, and possibly
+            animate the result.
+            </summary>
+      <remarks>
+            This class supports layout in a separate <see cref="P:yWorks.yFiles.UI.Model.LayoutExecutor.RunInThread">Thread</see> and some animation options.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExecutor.#ctor(yWorks.yFiles.UI.GraphControl,yWorks.yFiles.Layout.ILayouter)">
+      <summary>
+            Initializes a new instance of the <see cref="T:yWorks.yFiles.UI.Model.LayoutExecutor" /> class.
+            </summary>
+      <param name="control">The control which will be animated and provides the <see cref="T:yWorks.yFiles.UI.Model.IGraph" /> instance.</param>
+      <param name="layouter">The <see cref="T:yWorks.yFiles.Layout.ILayouter" /> to use.</param>
+      <remarks>
+            Use the <see cref="M:yWorks.yFiles.UI.Model.LayoutExecutor.Start" /> method to actually execute the task.
+            This will disable animation and content rect updates.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExecutor.#ctor(yWorks.yFiles.UI.GraphControl,yWorks.yFiles.UI.Model.IGraph,yWorks.yFiles.Layout.ILayouter)">
+      <summary>
+            Initializes a new instance of the <see cref="T:yWorks.yFiles.UI.Model.LayoutExecutor" /> class.
+            </summary>
+      <param name="control">The control which will be animated and provides the <see cref="T:yWorks.yFiles.UI.Model.IGraph" /> instance.</param>
+      <param name="graph">The graph to layout.</param>
+      <param name="layouter">The <see cref="T:yWorks.yFiles.Layout.ILayouter" /> to use.</param>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.LayoutExecutor.AnimateViewport">
+      <summary>
+            Gets or sets a value indicating whether to animate the viewport.
+            </summary>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.LayoutExecutor.ConfigureTableNodeLayout">
+      <summary>
+            Gets or sets a value indicating whether to automatically perform calls to <see cref="M:yWorks.yFiles.UI.Model.TableLayoutConfigurator.PrepareAll(yWorks.yFiles.UI.Model.IGraph)" /> and <see cref="M:yWorks.yFiles.UI.Model.TableLayoutConfigurator.RestoreAll(yWorks.yFiles.UI.Model.IGraph)" /> in order to 
+            layout table nodes.
+            </summary>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.LayoutExecutor.Control">
+      <summary>
+            Gets the control this instance has been created for.
+            </summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExecutor.CreateAnimation">
+      <summary>
+            Factory method that creates the <see cref="T:yWorks.Canvas.Animation.IAnimation" /> that will be used by this instance
+            after the layout has been calculated.
+            </summary>
+      <returns>The animation to use after the layout.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExecutor.CreateMorphAnimation">
+      <summary>
+            Factory method that creates the animation for the <see cref="T:yWorks.yFiles.UI.Model.IGraph" />.
+            </summary>
+      <returns>The animation instance.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExecutor.CreateTableAnimations">
+      <summary>
+            Creates an animation that morphs the layout of all <see cref="T:yWorks.yFiles.UI.Model.ITable" />s in the graph.
+            </summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExecutor.CreateTableLayoutConfigurator">
+      <summary>
+            Create a new instance of <see cref="P:yWorks.yFiles.UI.Model.LayoutExecutor.TableLayoutConfigurator" /> that is used if <see cref="P:yWorks.yFiles.UI.Model.LayoutExecutor.ConfigureTableNodeLayout" /> is enabled.
+            </summary>
+      <returns>A new instance of <see cref="P:yWorks.yFiles.UI.Model.LayoutExecutor.TableLayoutConfigurator" /></returns>
+      <remarks>This method is called upon first access to <see cref="P:yWorks.yFiles.UI.Model.LayoutExecutor.TableLayoutConfigurator" /></remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExecutor.CreateViewportAnimation(yWorks.Canvas.Geometry.Structs.RectD)">
+      <summary>
+            Factory method that creates the animation for the <see cref="P:yWorks.Canvas.CanvasControl.Viewport" />.
+            </summary>
+      <param name="targetBounds">The target bounds of the animation.</param>
+      <returns>The animation instance.</returns>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.LayoutExecutor.Duration">
+      <summary>
+            Gets or sets the duration of the animation.
+            </summary>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.LayoutExecutor.EasedAnimation">
+      <summary>
+            Gets or sets a value indicating whether to use eased animation.
+            </summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExecutor.Execute(System.Threading.ThreadStart)">
+      <summary>
+            Callback method that executes the specified <paramref name="threadStart" />.
+            </summary>
+      <param name="threadStart">The thread start delegate to execute.</param>
+      <remarks>
+            This implementation will either start a new <see cref="T:System.Threading.Thread" /> if <see cref="P:yWorks.yFiles.UI.Model.LayoutExecutor.RunInThread" />
+            is set to <see langword="true" />, or directly invoke the <paramref name="threadStart" />.
+            </remarks>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.LayoutExecutor.FinishHandler">
+      <summary>
+            Gets or sets the handler that will be executed when this instance has finished its work.
+            </summary>
+      <remarks>The handler that will be called upon completion or upon an exception (in which case the <see cref="T:System.EventArgs" />
+            will be of type <see cref="T:yWorks.yFiles.UI.Model.LayoutExceptionEventArgs" /> and carries the exception.</remarks>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.LayoutExecutor.Graph">
+      <summary>
+            Gets the graph this instance is working on.
+            </summary>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.LayoutExecutor.Layouter">
+      <summary>
+            Gets the <see cref="T:yWorks.yFiles.Layout.ILayouter" /> this instance is using.
+            </summary>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.LayoutExecutor.LayoutGraph">
+      <summary>
+            Gets the layout graph that is used by this instance to calculate the layout.
+            </summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExecutor.PrepareTableLayout">
+      <summary>
+            Set up <see cref="P:yWorks.yFiles.UI.Model.LayoutExecutor.TableLayoutConfigurator" /> for an actual layout run.
+            </summary>
+      <remarks>This implementation configures <see cref="P:yWorks.yFiles.UI.Model.TableLayoutConfigurator.HorizontalLayout" /> according to the <see cref="P:yWorks.yFiles.Layout.CanonicMultiStageLayouter.LayoutOrientation" /> and calls 
+            <see cref="M:yWorks.yFiles.UI.Model.TableLayoutConfigurator.PrepareAll(yWorks.yFiles.UI.Model.IGraph)" /></remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExecutor.RestoreTableLayout">
+      <summary>
+            Writes the table layout information provided through <see cref="P:yWorks.yFiles.UI.Model.LayoutExecutor.TableLayoutConfigurator" /> back to all tables.
+            </summary>
+      <remarks>This method is only called when the layout is not animated.</remarks>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.LayoutExecutor.RunInThread">
+      <summary>
+            Gets or sets a value indicating whether to run the layout in a separate thread.
+            </summary>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.LayoutExecutor.SelectionModel">
+      <summary>
+            Gets or sets the <see cref="T:yWorks.Canvas.Model.ISelectionModel`1" />
+            to use for the automatically registered <see cref="T:yWorks.yFiles.Algorithms.IDataProvider" />
+            instances for <see cref="F:yWorks.yFiles.Layout.LayouterKeys.SelectedNodesDpKey" /> and <see cref="F:yWorks.yFiles.Layout.LayouterKeys.SelectedEdgesDpKey" />.
+            </summary>
+      <remarks>If this value is <see langword="null" /> and <see cref="P:yWorks.yFiles.UI.Model.LayoutExecutor.Graph" /> is the same instance as <see cref="P:yWorks.yFiles.UI.Model.LayoutExecutor.Control" />'s IGraph instance,
+            the selection model from <see cref="P:yWorks.yFiles.UI.Model.LayoutExecutor.Control" /> is used instead.</remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExecutor.Start">
+      <summary>
+            Actually starts the process.
+            </summary>
+      <remarks>
+            This method will ultimately call the <see cref="M:yWorks.yFiles.UI.Model.LayoutExecutor.Execute(System.Threading.ThreadStart)" /> method that should then run the 
+            <see cref="T:System.Threading.ThreadStart" /> delegate.
+            </remarks>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.LayoutExecutor.TableLayoutConfigurator">
+      <summary>
+            The table layout configurator that is used if <see cref="P:yWorks.yFiles.UI.Model.LayoutExecutor.ConfigureTableNodeLayout" /> is enabled.
+            </summary>
+      <remarks>Upon first access, </remarks>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.LayoutExecutor.TargetBoundsInsets">
+      <summary>
+            Gets or sets the target bounds insets that will be used to calculate the target viewport.
+            </summary>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.LayoutExecutor.UpdateContentRect">
+      <summary>
+            Gets or sets a value indicating whether the content rectangle property of the <see cref="T:yWorks.Canvas.CanvasControl" />
+            should be updated upon completion.
+            </summary>
+    </member>
+    <member name="T:yWorks.yFiles.UI.Model.LayoutExtensions">
+      <summary>
+            Extension method holder class with layout-related utility methods.
+            </summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExtensions.ApplyLayout(yWorks.yFiles.UI.Model.IGraph,yWorks.yFiles.Layout.ILayouter)">
+      <summary>
+            Convenience method that runs a layouter on a graph using
+            <see cref="M:yWorks.yFiles.UI.Model.CopiedLayoutIGraph.ApplyLayout(yWorks.yFiles.UI.Model.IGraph,yWorks.yFiles.Layout.ILayouter)" />.
+            </summary>
+      <param name="graph">The graph.</param>
+      <param name="layouter">The layouter.</param>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExtensions.ApplyLayout(yWorks.yFiles.UI.Model.IGraph,yWorks.yFiles.Layout.ILayouter,System.TimeSpan,yWorks.yFiles.UI.GraphControl)">
+      <summary>
+            Convenience method that runs a layouter on a graph and animates the transition
+            to the new layout in a graph control that displays the graph.
+            </summary>
+      <param name="graph">The graph.</param>
+      <param name="layouter">The layouter to run.</param>
+      <param name="morphDuration">Duration of the animation of the layout.</param>
+      <param name="control">The graph control displaying the graph.</param>
+      <remarks>
+            The implementation simply delegates to a properly configured instance of <see cref="T:yWorks.yFiles.UI.Model.LayoutExecutor" />.
+            For more fine-grained control over the execution of the layout, use the helper class directly, instead.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExtensions.ApplyLayout(yWorks.yFiles.UI.Model.IGraph,yWorks.yFiles.Layout.ILayouter,System.TimeSpan,yWorks.yFiles.UI.GraphControl,System.EventHandler)">
+      <summary>
+            Convenience method that runs a layouter on a graph and animates the transition
+            to the new layout in a graph control that displays the graph. An event is called
+            once the animation has finished.
+            </summary>
+      <param name="graph">The graph.</param>
+      <param name="layouter">The layouter to run.</param>
+      <param name="morphDuration">Duration of the animation of the layout.</param>
+      <param name="control">The graph control displaying the graph.</param>
+      <param name="doneHandler">The handler that is called after the animation has finished. See <see cref="P:yWorks.yFiles.UI.Model.LayoutExecutor.FinishHandler" />.</param>
+      <remarks>
+            The implementation simply delegates to a properly configured instance of <see cref="T:yWorks.yFiles.UI.Model.LayoutExecutor" />.
+            For more fine-grained control over the execution of the layout, use the helper class directly, instead.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExtensions.CreateIncrementalLayerConstraintFactory(yWorks.yFiles.Layout.Hierarchic.IncrementalHierarchicLayouter,yWorks.yFiles.UI.Model.IGraph)">
+      <summary>
+            Creates and registers an incremental layer constraint factory for an <see cref="T:yWorks.yFiles.UI.Model.IGraph" />.
+            </summary>
+      <param name="ihl">The IHL instance where the factory is created. This is a <c>this</c> parameter, so that the method can be used
+            as an extension method.</param>
+      <param name="graph">The graph for which the factory is created</param>
+      <returns>the sequence constraint factory</returns>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExtensions.CreateIncrementalLayerConstraintFactory(yWorks.yFiles.UI.Model.IGraph)">
+      <summary>
+            Creates and registers an incremental layerer constraint factory for a graph.
+            </summary>
+      <param name="graph">The graph.</param>
+      <returns>the layerer constraint factory</returns>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExtensions.CreateLayerConstraintFactory(yWorks.yFiles.UI.Model.IGraph)">
+      <summary>
+            Creates and registers a layerer constraint factory for a graph.
+            </summary>
+      <param name="graph">The graph.</param>
+      <returns>the layerer constraint factory</returns>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExtensions.CreateSequenceConstraintFactory(yWorks.yFiles.Layout.Hierarchic.IncrementalHierarchicLayouter,yWorks.yFiles.UI.Model.IGraph)">
+      <summary>
+            Creates and registers a sequencer constraint factory for an <see cref="T:yWorks.yFiles.UI.Model.IGraph" />.
+            </summary>
+      <param name="ihl">The IHL instance where the factory is created. This is a <c>this</c> parameter, so that the method can be used
+            as an extension method.</param>
+      <param name="graph">The graph.</param>
+      <returns>the sequence constraint factory</returns>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExtensions.CreateSequenceConstraintFactory(yWorks.yFiles.UI.Model.IGraph)">
+      <summary>
+            Creates and registers a sequencer constraint factory for a graph.
+            </summary>
+      <param name="graph">The graph.</param>
+      <returns>the sequence constraint factory</returns>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExtensions.Dispose(yWorks.yFiles.Layout.Hierarchic.ConstraintLayerer.IConstraintFactory,yWorks.yFiles.UI.Model.IGraph)">
+      <summary>
+            Unregisters and disposes the specified layerer constraint factory.
+            </summary>
+      <param name="factory">The layerer constraint factory.</param>
+      <param name="graph">The graph for which the factory was registered.</param>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExtensions.Dispose(yWorks.yFiles.Layout.Hierarchic.Incremental.ILayerConstraintFactory,yWorks.yFiles.UI.Model.IGraph)">
+      <summary>
+            Unregisters and disposes the specified incremental layerer constraint factory.
+            </summary>
+      <param name="factory">The layerer constraint factory.</param>
+      <param name="graph">The graph for which the factory was registered.</param>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExtensions.Dispose(yWorks.yFiles.Layout.Hierarchic.Incremental.ISequenceConstraintFactory,yWorks.yFiles.UI.Model.IGraph)">
+      <summary>
+            Unregisters and disposes the specified sequence constraint factory.
+            </summary>
+      <param name="factory">The sequence constraint factory.</param>
+      <param name="graph">The graph for which the factory was registered.</param>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExtensions.DoLayout(yWorks.yFiles.Layout.ILayouter,yWorks.yFiles.UI.Model.IGraph)">
+      <summary>
+            Convenience method that runs a layouter on a graph.
+            </summary>
+      <param name="layouter">The layouter.</param>
+      <param name="graph">The graph.</param>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutExtensions.MorphLayout(yWorks.yFiles.UI.GraphControl,yWorks.yFiles.Layout.ILayouter,System.TimeSpan,System.EventHandler)">
+      <summary>
+            Convenience method that runs a layouter on the graph of a given graph control
+            and animates the transition. An event is called once the animation has finished.
+            </summary>
+      <param name="control">The graph control.</param>
+      <param name="layouter">The layouter to run.</param>
+      <param name="morphDuration">Duration of the animation of the layout.</param>
+      <param name="doneHandler">The handler that is called after the animation has finished. See <see cref="P:yWorks.yFiles.UI.Model.LayoutExecutor.FinishHandler" />.</param>
+      <remarks>
+            The implementation simply delegates to a properly configured instance of <see cref="T:yWorks.yFiles.UI.Model.LayoutExecutor" />.
+            For more fine-grained control over the execution of the layout, use the helper class directly, instead.
+            </remarks>
+    </member>
+    <member name="T:yWorks.yFiles.UI.Model.LayoutGraphAdapter">
+      <summary>
+            Adapter class that can be used to obtain a <see cref="T:yWorks.yFiles.Layout.IGraphLayout" /> and <see cref="T:yWorks.yFiles.Algorithms.IGraphInterface" />
+            from an <see cref="T:yWorks.yFiles.UI.Model.IGraph" />.
+            </summary>
+      <remarks>
+            This adapter needs to be used in order to apply layout algorithms to <see cref="T:yWorks.yFiles.UI.Model.IGraph" /> instances.
+            The following pattern should be used:
+            <code>
+                // build the adapter
+                LayoutGraphAdapter adapter = new LayoutGraphAdapter(graph, selectionModel);
+            
+                // create a copy for improved performance and stability
+                CopiedLayoutGraph layoutGraph = new CopiedLayoutGraph(adapter, adapter);
+                
+                // perform the layout on the copy
+                layouter.DoLayout(layoutGraph);
+                
+                // apply the results to the original IGraph
+                layoutGraph.CommitLayoutToOriginalGraph();
+            </code>
+            Alternatively one can use the <see cref="T:yWorks.yFiles.UI.Animation.LayoutMorpherWrapper" /> to morph the layout:
+            <code>
+                // build the adapter
+                LayoutGraphAdapter adapter = new LayoutGraphAdapter(graph, selectionModel);
+            
+                // create a copy for improved performance and stability
+                CopiedLayoutGraph layoutGraph = new CopiedLayoutGraph(adapter, adapter);
+                
+                // perform the layout on the copy
+                layouter.DoLayout(layoutGraph);
+                
+                // create the animation object
+                LayoutMorpherWrapper morpher = new LayoutMorpherWrapper(graph, layoutGraph, TimeSpan.FromSeconds(1));
+                
+                // and play
+                Animator animator = new Animator(view);
+                animator.Animate(morpher);
+            </code>
+            Class <see cref="T:yWorks.yFiles.UI.Model.CopiedLayoutIGraph" /> is a convenience class that can be used
+            to quickly assign new layouts to an <c>IGraph</c>:
+            <code>
+                // build the adapter copy
+                CopiedLayoutIGraph copy = new CopiedLayoutIGraph(graph);
+            
+                // perform the layout on the copy
+                layouter.DoLayout(copy);
+                
+                // apply the results to the original IGraph
+                copy.CommitLayoutToOriginalGraph();
+            </code>
+            or even:
+            <code>
+              CopiedLayoutIGraph.ApplyLayout(graph, layouter);
+            </code>
+            <para>
+            This class will use the provided <see cref="P:yWorks.yFiles.UI.Model.LayoutGraphAdapter.SelectionModel" />
+            to attach <see cref="T:yWorks.yFiles.Algorithms.IDataProvider" /> instances to the <c>GraphInterface</c>
+            for the <see cref="F:yWorks.yFiles.Layout.LayouterKeys.SelectedNodesDpKey" /> and <see cref="F:yWorks.yFiles.Layout.LayouterKeys.SelectedEdgesDpKey" />
+            data provider keys. Also it will automatically wrap <see cref="T:yWorks.Canvas.Model.IMapper`2" /> instances
+            registered with the <see cref="T:yWorks.yFiles.UI.Model.IMapperRegistry" /> found in the <see cref="M:yWorks.Support.ILookup.Lookup(System.Type)" />
+            of the <see cref="T:yWorks.yFiles.UI.Model.IGraph" /> and wrap those instances in <see cref="T:yWorks.yFiles.Algorithms.IDataProvider" /> instances.
+            </para>
+            <para>
+            Also this class provides a mechanism to adapt the edge to edge connection feature that is available for <see cref="T:yWorks.yFiles.UI.Model.IGraph" />s, where
+            <see cref="T:yWorks.yFiles.UI.Model.IEdge" />s can also be adjacent to other edges. Since this construct is not available for <see cref="T:yWorks.yFiles.Algorithms.IGraphInterface" />, using
+            the <see cref="P:yWorks.yFiles.UI.Model.LayoutGraphAdapter.EdgeToEdgeConnectionsIncluded" /> property, this type can be told to insert small <see cref="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.CreateEdgePortLayout(yWorks.yFiles.UI.Model.IPort)">dummy nodes</see>
+            into the graph as the end points for edges connected to other edges.
+            </para>
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.#ctor">
+      <summary>
+            Creates the adapter with no intial <see cref="T:yWorks.yFiles.UI.Model.IGraph" />
+            and no <see cref="T:yWorks.Canvas.Model.ISelectionModel`1" />.
+            </summary>
+      <remarks>Before this instance can be used for automatic layouts, you mus assign a value to the <see cref="P:yWorks.yFiles.UI.Model.LayoutGraphAdapter.AdaptedGraph" /> property.</remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.#ctor(yWorks.yFiles.UI.Model.IGraph)">
+      <summary>
+            Creates the adapter using a given <see cref="T:yWorks.yFiles.UI.Model.IGraph" /> 
+            and no <see cref="T:yWorks.Canvas.Model.ISelectionModel`1" />.
+            </summary>
+      <param name="graph">The graph to build an adapter for.</param>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.#ctor(yWorks.yFiles.UI.Model.IGraph,yWorks.Canvas.Model.ISelectionModel{yWorks.Canvas.Model.IModelItem})">
+      <summary>
+            Creates the adapter using a given <see cref="T:yWorks.yFiles.UI.Model.IGraph" /> 
+            and <see cref="T:yWorks.Canvas.Model.ISelectionModel`1" />.
+            </summary>
+      <param name="graph">The graph to build an adapter for.</param>
+      <param name="selectionModel">The selection model to use by the 
+            <see cref="F:yWorks.yFiles.Layout.LayouterKeys.SelectedNodesDpKey" /> and <see cref="F:yWorks.yFiles.Layout.LayouterKeys.SelectedEdgesDpKey" /><see cref="T:yWorks.yFiles.Algorithms.IDataProvider" /> instances that are automatically bound to this adapter.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <c>graph</c> is null.</exception>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.LayoutGraphAdapter.AdaptedGraph">
+      <summary>
+            Sets or yields the original <see cref="T:yWorks.yFiles.UI.Model.IGraph" /> instance that is
+            adapted by this instance.
+            </summary>
+      <exception cref="T:System.ArgumentException"> if the value of this property is already non <see langword="null" /></exception>
+      <remarks>Before performing a layout, this property must be set <b>or</b> the adapter must have been created with <see cref="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.#ctor(yWorks.yFiles.UI.Model.IGraph)" /> or <see cref="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.#ctor(yWorks.yFiles.UI.Model.IGraph,yWorks.Canvas.Model.ISelectionModel{yWorks.Canvas.Model.IModelItem})" />.
+            Note that this property cannot be assigned again if its value is already non <see langword="null" />.</remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.CopyStyle(yWorks.yFiles.UI.Drawing.IEdgeStyle)">
+      <summary>
+            Creates a copy of an <see cref="T:yWorks.yFiles.UI.Drawing.IEdgeStyle" /> instance that is used during the layout for path calculations and the like. 
+            </summary>
+      <param name="style">The style to copy.</param>
+      <returns>A replacement of <paramref name="style" /> that is used during layout calculation.</returns>
+      <remarks>This method creates suitable copies of <paramref name="style" /> for the following <see cref="T:yWorks.yFiles.UI.Drawing.IEdgeStyle" /> implementations:
+            <list type="bullet">
+            <item><see cref="T:yWorks.yFiles.UI.Drawing.PolylineEdgeStyle" /></item>
+            <item><see cref="T:yWorks.yFiles.UI.Drawing.ArcEdgeStyle" /></item>
+            <item><see cref="T:yWorks.yFiles.UI.Drawing.EdgeSegmentControlEdgeStyle" /></item>
+            <item><see cref="T:yWorks.yFiles.UI.Drawing.UIElementEdgeStyle" /></item>
+            <item><see cref="T:yWorks.yFiles.UI.Drawing.Common.VoidEdgeStyle" /></item>
+            </list>
+            All other style implementations are replaced by instances of <see cref="T:yWorks.yFiles.UI.Drawing.PolylineEdgeStyle" />. If you use a custom style
+            where the edge path calculation depends on the style, you should overwrite this method and create a copy of your style instance.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.CopyStyle(yWorks.yFiles.UI.Drawing.INodeStyle)">
+      <summary>
+            Creates a copy of an <see cref="T:yWorks.yFiles.UI.Drawing.INodeStyle" /> instance that is used during the layout. 
+            </summary>
+      <param name="style">The style to copy.</param>
+      <returns>A replacement of <paramref name="style" /> that is used during layout calculation.</returns>
+      <remarks>This method creates suitable copies of <paramref name="style" /> for the following <see cref="T:yWorks.yFiles.UI.Drawing.INodeStyle" /> implementations:
+            <list type="bullet">
+            <item><see cref="T:yWorks.yFiles.UI.Drawing.ShapeNodeStyle" /></item>
+            <item><see cref="T:yWorks.yFiles.UI.Drawing.GeneralPathNodeStyle" /></item>
+            <item><see cref="T:yWorks.yFiles.UI.Drawing.PanelNodeStyle" /></item>
+            <item><see cref="T:yWorks.yFiles.UI.Drawing.ShinyPlateNodeStyle" /></item>
+            <item><see cref="T:yWorks.yFiles.UI.Drawing.BevelNodeStyle" /></item>
+            </list>
+            All other style implementations are replaced by instances of <see cref="T:yWorks.yFiles.UI.Drawing.ShapeNodeStyle" />. If you use a custom style
+            where the layout calculation depends on the style, you should overwrite this method and create a copy of your style instance.
+            </remarks>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.LayoutGraphAdapter.CopyStyles">
+      <summary>
+            Controls whether node and edge styles should be copied during creation of the layout graph, or if the original instances should be used.
+            </summary>
+      <remarks>Using the original instances can lead to race conditions if the layout is calculated on a different thread. If <see langword="true" />, node and edge styles are copied,
+            otherwise, the original instances are used. Default value is <see langword="false" />.</remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.CreateEdgeLabelCandidate(yWorks.yFiles.UI.Model.ILabel,yWorks.yFiles.UI.Model.ILabel,yWorks.yFiles.UI.Model.ILabelModelParameter,yWorks.yFiles.Layout.IEdgeLabelLayout)">
+      <summary>
+            Creates the <see cref="T:yWorks.yFiles.Layout.EdgeLabelCandidate" /> for a given label and
+            <see cref="T:yWorks.yFiles.UI.Model.ILabelModelParameter" /> combination.
+            </summary>
+      <param name="originalLabel">The original label.</param>
+      <param name="dummyLabel">The dummy label that describes the current laid out label.</param>
+      <param name="parameter">The parameter to create a candidate for.</param>
+      <param name="labelLayout">The <see cref="T:yWorks.yFiles.Layout.IEdgeLabelLayout" /> of the label to pass to the candidate.</param>
+      <returns>A candidate to yield for the labeling algorithms or <see langword="null" />.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.CreateEdgeLayout(yWorks.yFiles.UI.Model.IEdge)">
+      <summary>
+            Factory method that creates an <see cref="T:yWorks.yFiles.Layout.IEdgeLayout" /> implementation that wraps the given
+            <see cref="T:yWorks.yFiles.UI.Model.IEdge" /></summary>
+      <param name="edge">The edge to wrap.</param>
+      <returns>A wrapper instance.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.CreateEdgePortLayout(yWorks.yFiles.UI.Model.IPort)">
+      <summary>
+            Callback factory method that creates the <see cref="T:yWorks.yFiles.Layout.INodeLayout" /> for the given <see cref="T:yWorks.yFiles.UI.Model.IPort" />
+            that is used as a dummy to represent the port at the <see cref="T:yWorks.yFiles.UI.Model.IEdge" /> that owns <paramref name="port" />.
+            </summary>
+      <param name="port">The port to create the layout for.</param>
+      <returns>A suitable implementation of <see cref="T:yWorks.yFiles.Layout.INodeLayout" /> that uses the <see cref="P:yWorks.yFiles.UI.Model.IPort.Location" /> as the center of the node.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.CreateNodeLabelCandidate(yWorks.yFiles.UI.Model.ILabel,yWorks.yFiles.UI.Model.ILabel,yWorks.yFiles.UI.Model.ILabelModelParameter,yWorks.yFiles.Layout.INodeLabelLayout)">
+      <summary>
+            Creates a <see cref="T:yWorks.yFiles.Layout.NodeLabelCandidate" /> for a given label
+            and <see cref="T:yWorks.yFiles.UI.Model.ILabelModelParameter" /> combination.
+            </summary>
+      <param name="originalLabel">The original label.</param>
+      <param name="dummyLabel">The dummy label that describes the current laid out label.</param>
+      <param name="parameter">The parameter to create a candidate for.</param>
+      <param name="ownerLayout">The <see cref="T:yWorks.yFiles.Layout.INodeLabelLayout" /> of the label to pass to the candidate.</param>
+      <returns>A candidate to yield for the labeling algorithms or <see langword="null" />.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.CreateNodeLayout(yWorks.yFiles.UI.Model.INode)">
+      <summary>
+            Factory method that creates a <see cref="T:yWorks.yFiles.Layout.INodeLayout" /> implementation that wraps the given
+            <see cref="T:yWorks.yFiles.UI.Model.INode" /></summary>
+      <param name="node">The node to wrap.</param>
+      <returns>A wrapper instance.</returns>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.LayoutGraphAdapter.DataProviderKeys">
+      <summary>
+            An array of all data provider look-up keys that are registered with
+            the graph.
+            </summary>
+    </member>
+    <member name="F:yWorks.yFiles.UI.Model.LayoutGraphAdapter.EdgeLabelLayoutPreferredPlacementDpKey">
+      <summary>
+            A <see cref="T:yWorks.yFiles.UI.Model.IMapperRegistry" /> tag for an <see cref="T:yWorks.Canvas.Model.IMapper`2" />
+            that provides for the edge <see cref="T:yWorks.yFiles.UI.Model.ILabel" />s in the <see cref="P:yWorks.yFiles.UI.Model.LayoutGraphAdapter.AdaptedGraph" /> a
+            <see cref="T:yWorks.yFiles.Layout.LabelPlacements" /> constant.
+            </summary>
+      <remarks>
+            If there is a <see cref="T:yWorks.Canvas.Model.IMapper`2" /> in the <see cref="P:yWorks.yFiles.UI.Model.IGraph.MapperRegistry" />
+            it will be queried for each <see cref="T:yWorks.yFiles.UI.Model.IEdge">edge</see> <see cref="T:yWorks.yFiles.UI.Model.ILabel">label</see>
+            to set the <see cref="P:yWorks.yFiles.Layout.IEdgeLabelLayout.PreferredPlacement" /> property of the adapted
+            implementation.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.EdgeObjects">
+      <summary>Returns an iterator that provides access to all edges residing in the graph.</summary>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.LayoutGraphAdapter.EdgePortNodeSize">
+      <summary>
+            Gets or sets the size of the nodes that are inserted for the ports that are created for 
+            <see cref="T:yWorks.yFiles.UI.Model.IEdge" />s that are connected at other <see cref="T:yWorks.yFiles.UI.Model.IEdge" />s.
+            </summary>
+      <remarks>
+            If this instance is configured to create dummy nodes for ports at edges, this will be the initial
+            size of the dummy nodes with the center of the node always being the location of the port.
+            The default is <c>3x3</c>.
+            </remarks>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.LayoutGraphAdapter.EdgeToEdgeConnectionsIncluded">
+      <summary>
+            Determines whether edges at other edges will be included in the layout graph or simply ignored.
+            </summary>
+      <remarks>
+            If this property is set to <see langword="false" />, edges at other edges are simply ignored and not part
+            of the layout graph.
+            The default is <see langword="true" /> in which case dummy nodes are inserted into the layout graph for each source and target port
+            of an <see cref="T:yWorks.yFiles.UI.Model.IEdge" /> that is <see cref="P:yWorks.yFiles.UI.Model.IPort.Owner">owned</see> by an <see cref="T:yWorks.yFiles.UI.Model.IEdge" />.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.GetBoundingBox">
+      <summary>Returns the bounding box of the graph layout.</summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.GetDataProvider(System.Object)">
+      <summary>
+            Returns the data provider that is registered with the graph using the given
+            look-up key.
+            </summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.GetEdgeLabelLayout(System.Object)">
+      <summary>
+            Returns an array of layout information for all edge labels
+            belonging to the given edge.
+            </summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.GetEdgeLayout(System.Object)">
+      <summary>Returns the layout information for a given edge.</summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.GetLabelCandidateDescriptor(yWorks.yFiles.UI.Model.ILabel,yWorks.yFiles.UI.Model.ILabel,yWorks.yFiles.UI.Model.ILabelModelParameter)">
+      <summary>
+            Callback that retrieves the label candidate descriptor for the given label and parameter.
+            </summary>
+      <param name="originalLabel">The original label to which a parameter will be applied.</param>
+      <param name="dummyLabel">The dummy label to which the parameter will be applied.</param>
+      <param name="parameter">The parameter to apply.</param>
+      <returns>A descriptor or <see langword="null" />.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.GetLabelCandidateDescriptorProvider(yWorks.yFiles.UI.Model.IGraph)">
+      <summary>
+            Callback method that gets the label candidate descriptor provider for the given <see cref="T:yWorks.yFiles.UI.Model.IGraph" />.
+            </summary>
+      <param name="graph">The graph.</param>
+      <returns>The result of a <see cref="M:yWorks.Support.ILookup.Lookup(System.Type)" /> query on <paramref name="graph" />
+            for the <see cref="T:yWorks.yFiles.UI.Model.ILabelCandidateDescriptorProvider" /> type.</returns>
+      <remarks>
+            This implementation uses the <see cref="T:yWorks.yFiles.UI.Model.IGraph" />'s <see cref="T:yWorks.Support.ILookup" />
+            to find an implementation of the <see cref="T:yWorks.yFiles.UI.Model.ILabelCandidateDescriptorProvider" />.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.GetNodeLabelLayout(System.Object)">
+      <summary>
+            Returns an array of layout information for all node labels
+            belonging to the given node.
+            </summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.GetNodeLayout(System.Object)">
+      <summary>Returns the layout information for a given node.</summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.GetSource(System.Object)">
+      <summary>Returns the source node associated with the given edge.</summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.GetTarget(System.Object)">
+      <summary>Returns the target node associated with the given edge.</summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.LayoutGraphAdapter.NodeObjects">
+      <summary>Returns an iterator that provides access to all nodes residing in the graph.</summary>
+    </member>
+    <member name="F:yWorks.yFiles.UI.Model.LayoutGraphAdapter.PortDummyNodeDpKey">
+      <summary>This key is used to provide information about dummy nodes that have been inserted into the graph
+            to model edges at edges.</summary>
+      <remarks>
+            This key can be used to query an <see cref="T:yWorks.yFiles.Algorithms.IDataProvider" /> that yields <see langword="true" /> for <see cref="M:yWorks.yFiles.Algorithms.IDataProvider.GetBool(System.Object)" />
+            for nodes that are actually representatives of <see cref="T:yWorks.yFiles.UI.Model.IPort" />s at <see cref="T:yWorks.yFiles.UI.Model.IEdge" />s.
+            Also the <see cref="M:yWorks.yFiles.Algorithms.IDataProvider.Get(System.Object)" /> method will yield the corresponding original <see cref="T:yWorks.yFiles.UI.Model.IEdge" />.
+            </remarks>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.LayoutGraphAdapter.SelectionModel">
+      <summary>
+            Gets or sets the <see cref="T:yWorks.Canvas.Model.ISelectionModel`1" />
+            to use for the automatically registered <see cref="T:yWorks.yFiles.Algorithms.IDataProvider" />
+            instances for <see cref="F:yWorks.yFiles.Layout.LayouterKeys.SelectedNodesDpKey" /> and <see cref="F:yWorks.yFiles.Layout.LayouterKeys.SelectedEdgesDpKey" />.
+            </summary>
+    </member>
+    <member name="T:yWorks.yFiles.UI.Model.TableLayoutConfigurator">
+      <summary>
+            Support class that correctly configures <see cref="T:yWorks.yFiles.Layout.Hierarchic.Incremental.PartitionGrid" /> information from a given table configuration.
+            </summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.TableLayoutConfigurator.#ctor">
+      <summary>Initializes a new instance of the <see cref="T:yWorks.yFiles.UI.Model.TableLayoutConfigurator" /> class</summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.TableLayoutConfigurator.CleanUp(yWorks.yFiles.UI.Model.IGraph)">
+      <summary>
+            Destroy all information that results from a previous <see cref="M:yWorks.yFiles.UI.Model.TableLayoutConfigurator.PrepareAll(yWorks.yFiles.UI.Model.IGraph)" /> and a subsequent layout
+            </summary>
+      <param name="graph" />
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.TableLayoutConfigurator.CompactionEnabled">
+      <summary>
+             Specifies whether or not to enable size compaction for table nodes.
+             </summary>
+      <remarks>
+             If size compaction is enabled, the size of a column or row (or a table
+             node for that matter) may be reduced due to layout calculation, but never
+             below the column's or row's minimum size.
+            If size compaction is disabled, columns and rows (and therefore table
+             nodes) may only grow due to layout calculation.
+             <para>
+             The default value for this property is <see langword="true" />.
+             </para>
+             </remarks>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.TableLayoutConfigurator.FromSketch">
+      <summary>
+             Specifies whether or not from sketch mode should be enabled.
+             </summary>
+      <remarks>If enabled, the positions of the table group nodes are considered, i.e.,
+             for horizontal layout configuration these nodes are sorted according to their y-coordinate
+             and for vertical layout configuration according to their x-coordinate.
+             </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.TableLayoutConfigurator.GetColumnLayout(yWorks.yFiles.UI.Model.ITable,yWorks.Canvas.Geometry.Structs.RectD)">
+      <summary>
+            Return the sizes of all <b>leaf</b> rows.
+            </summary>
+      <param name="originalTable">The table</param>
+      <param name="nodeLayout">The final layout of the node that owns the table</param>
+      <returns>The sizes of all <b>leaf</b> rows in <paramref name="originalTable" />, in their natural order.</returns>
+      <remarks>This method does not modify <paramref name="originalTable" />. You also need to call <see cref="M:yWorks.yFiles.UI.Model.TableLayoutConfigurator.CleanUp(yWorks.yFiles.UI.Model.IGraph)" /> explicitly if you don't
+            need the <see cref="T:yWorks.yFiles.UI.Model.TableLayoutConfigurator" /> anymore.</remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.TableLayoutConfigurator.GetRowLayout(yWorks.yFiles.UI.Model.ITable,yWorks.Canvas.Geometry.Structs.RectD)">
+      <summary>
+            Return the sizes of all <b>leaf</b> rows.
+            </summary>
+      <param name="originalTable">The table</param>
+      <param name="nodeLayout">The final layout of the node that owns the table</param>
+      <returns>The sizes of all <b>leaf</b> rows in <paramref name="originalTable" />, in their natural order.</returns>
+      <remarks>This method does not modify <paramref name="originalTable" />. You also need to call <see cref="M:yWorks.yFiles.UI.Model.TableLayoutConfigurator.CleanUp(yWorks.yFiles.UI.Model.IGraph)" /> explicitly if you don't
+            need the <see cref="T:yWorks.yFiles.UI.Model.TableLayoutConfigurator" /> anymore.</remarks>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.TableLayoutConfigurator.HorizontalLayout">
+      <summary>
+             Gets or sets whether the configurator will prepare its associated
+             graph for a vertical (that is top-to-bottom or bottom-to-top) layout
+             calculation or a horizontal (that is left-to-right or right-to-left)
+            one.
+            </summary>
+      <remarks>
+             The default value for this property is <see langword="false" />.
+             </remarks>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.TableLayoutConfigurator.MinimalTableDistance">
+      <summary>
+            Gets or sets the minimal distance between two different table nodes
+            </summary>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.TableLayoutConfigurator.PrepareAll(yWorks.yFiles.UI.Model.IGraph)">
+      <summary>
+            Setup partition grid information from a graph that contains table structures
+            </summary>
+      <param name="graph" />
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.TableLayoutConfigurator.RestoreAll(yWorks.yFiles.UI.Model.IGraph)">
+      <summary>
+            Write back all information from the partition grid
+            </summary>
+      <param name="graph" />
+    </member>
+    <member name="T:yWorks.yFiles.UI.Model.YGraphAdapter">
+      <summary>
+            Utility class that conveniently converts an <see cref="T:yWorks.yFiles.UI.Model.IGraph" />
+            instance to a <see cref="T:yWorks.yFiles.Algorithms.Graph" /> instance.
+            </summary>
+      <remarks>
+            This class creates a structural copy of a given <see cref="T:yWorks.yFiles.UI.Model.IGraph" />
+            and provides convenience methods to convert entities from one instance
+            to their corresponding representatives in the other instance.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.YGraphAdapter.#ctor(yWorks.yFiles.UI.Model.IGraph)">
+      <summary>
+            Initializes a new instance of the <see cref="T:yWorks.yFiles.UI.Model.YGraphAdapter" /> class.
+            </summary>
+      <param name="originalGraph">The original graph whose structure will be copied.</param>
+      <remarks>
+            This will create a copy of the <paramref name="originalGraph" />
+            that has the same structure and makes it available via the <see cref="P:yWorks.yFiles.UI.Model.YGraphAdapter.YGraph" />
+            property.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.YGraphAdapter.CreateDataMap``2(yWorks.Canvas.Model.IMapper{``0,``1})">
+      <summary>
+            Creates an <see cref="T:yWorks.yFiles.Algorithms.IDataMap" /> that delegates to the provided <see cref="T:yWorks.Canvas.Model.IMapper`2" />
+            when queried for items in the <see cref="P:yWorks.yFiles.UI.Model.YGraphAdapter.YGraph" />.
+            </summary>
+      <param name="mapper">The mapper to direct requests to.</param>
+      <typeparam name="K">The type of the keys in the mapper.</typeparam>
+      <typeparam name="V">The type of the values in the mapper.</typeparam>
+      <returns>An <see cref="T:yWorks.yFiles.Algorithms.IDataMap" /> that will delegate the functionality to the <paramref name="mapper" />.</returns>
+      <remarks>
+            This method is useful where algorithms require <see cref="T:yWorks.yFiles.Algorithms.IDataMap" />s as input
+            and that input can be obtained from <see cref="T:yWorks.Canvas.Model.IMapper`2" /> instances that 
+            provide and accept values for the <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetOriginalNode(yWorks.yFiles.Algorithms.Node)">original nodes</see> and
+            <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetOriginalEdge(yWorks.yFiles.Algorithms.Edge)">edges</see>.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.YGraphAdapter.CreateDataProvider``2(yWorks.Canvas.Model.IMapper{``0,``1})">
+      <summary>
+            Creates an <see cref="T:yWorks.yFiles.Algorithms.IDataProvider" /> that delegates to the provided <see cref="T:yWorks.Canvas.Model.IMapper`2" />
+            when queried for items in the <see cref="P:yWorks.yFiles.UI.Model.YGraphAdapter.YGraph" />.
+            </summary>
+      <param name="mapper">The mapper to direct requests to.</param>
+      <typeparam name="K">The type of the keys in the mapper.</typeparam>
+      <typeparam name="V">The type of the values in the mapper.</typeparam>
+      <returns>A DataProvider that will delegate requests to the <paramref name="mapper" />.</returns>
+      <remarks>
+            This method is useful where algorithms require <see cref="T:yWorks.yFiles.Algorithms.IDataProvider" />s as input
+            and that input can be obtained from <see cref="T:yWorks.Canvas.Model.IMapper`2" /> instances that 
+            provide the values for the <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetOriginalNode(yWorks.yFiles.Algorithms.Node)">original nodes</see> and
+            <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetOriginalEdge(yWorks.yFiles.Algorithms.Edge)">edges</see>.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.YGraphAdapter.CreateDataProvider``2(yWorks.Canvas.Model.MapperDelegate{``0,``1})">
+      <summary>
+            Creates an <see cref="T:yWorks.yFiles.Algorithms.IDataProvider" /> that delegates to the provided delegate
+            when queried for items in the <see cref="P:yWorks.yFiles.UI.Model.YGraphAdapter.YGraph" />.
+            </summary>
+      <param name="mapperDelegate">The mapper delegate to direct requests to.</param>
+      <typeparam name="K">The type of the keys in the mapper.</typeparam>
+      <typeparam name="V">The type of the values in the mapper.</typeparam>
+      <returns>A DataProvider that will delegate requests to the <paramref name="mapperDelegate" />.</returns>
+      <remarks>
+            This method is useful where algorithms require <see cref="T:yWorks.yFiles.Algorithms.IDataProvider" />s as input
+            and that input can be through a dynamic callback that 
+            provides the values for the <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetOriginalNode(yWorks.yFiles.Algorithms.Node)">original nodes</see> and
+            <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetOriginalEdge(yWorks.yFiles.Algorithms.Edge)">edges</see>.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.YGraphAdapter.CreateEdgeEnumerable(yWorks.yFiles.Algorithms.EdgeList)">
+      <summary>
+            Creates an <see cref="T:System.Collections.Generic.IEnumerable`1">enumerable of edges</see> that
+            maps the edges from the <see cref="T:yWorks.yFiles.Algorithms.EdgeList" /> to their <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetOriginalEdge(yWorks.yFiles.Algorithms.Edge)">
+            original</see> ones.
+            </summary>
+      <param name="el">The edge list.</param>
+      <returns>An enumerable that contains the <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetOriginalEdge(yWorks.yFiles.Algorithms.Edge)">original</see> edges
+            for the ones in the list.</returns>
+      <remarks>
+            This method is useful where algorithms yield <see cref="T:yWorks.yFiles.Algorithms.EdgeList" /> instances
+            as results and the result needs to be interpreted in terms of
+            the <see cref="P:yWorks.yFiles.UI.Model.YGraphAdapter.OriginalGraph" />.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.YGraphAdapter.CreateEdgeList(System.Collections.Generic.IEnumerable{yWorks.yFiles.UI.Model.IEdge})">
+      <summary>
+            Creates an <see cref="T:yWorks.yFiles.Algorithms.EdgeList" /> that
+            maps the edges from the <see cref="T:System.Collections.Generic.IEnumerable`1" /> to their <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetCopiedEdge(yWorks.yFiles.UI.Model.IEdge)">
+            copied</see> ones.
+            </summary>
+      <param name="el">The edges from the <see cref="P:yWorks.yFiles.UI.Model.YGraphAdapter.OriginalGraph" />.</param>
+      <returns>An <see cref="T:yWorks.yFiles.Algorithms.EdgeList" /> that contains the <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetCopiedEdge(yWorks.yFiles.UI.Model.IEdge)">copied</see> edges
+            for the ones in the enumerable.</returns>
+      <remarks>
+            This method is useful where algorithms require <see cref="T:yWorks.yFiles.Algorithms.EdgeList" /> instances
+            as input and those edges are available as <see cref="T:System.Collections.Generic.IEnumerable`1" />s in 
+            the <see cref="P:yWorks.yFiles.UI.Model.YGraphAdapter.OriginalGraph" />.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.YGraphAdapter.CreateEdgeMap``1(yWorks.Canvas.Model.IMapper{yWorks.yFiles.UI.Model.IEdge,``0})">
+      <summary>
+            Creates an <see cref="T:yWorks.yFiles.Algorithms.IEdgeMap" /> that delegates to the provided <see cref="T:yWorks.Canvas.Model.IMapper`2" />
+            when queried for <see cref="T:yWorks.yFiles.Algorithms.Edge" />s in the <see cref="P:yWorks.yFiles.UI.Model.YGraphAdapter.YGraph" />.
+            </summary>
+      <param name="mapper">The mapper to direct requests to.</param>
+      <typeparam name="V">The type of the values in the mapper.</typeparam>
+      <returns>An <see cref="T:yWorks.yFiles.Algorithms.IEdgeMap" /> that will delegate reads and writes to the <paramref name="mapper" />.</returns>
+      <remarks>
+            This method is useful where algorithms require <see cref="T:yWorks.yFiles.Algorithms.IEdgeMap" />s as input
+            and this can be mapped to corresponding <see cref="T:yWorks.Canvas.Model.IMapper`2" /> instances that 
+            provide and accept the values for the <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetOriginalEdge(yWorks.yFiles.Algorithms.Edge)">original edges</see>.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.YGraphAdapter.CreateEdgeMap``1(yWorks.Canvas.Model.MapperDelegate{yWorks.yFiles.UI.Model.IEdge,``0})">
+      <summary>
+            Creates an <see cref="T:yWorks.yFiles.Algorithms.IEdgeMap" /> that delegates to the provided delegate
+            when queried for <see cref="T:yWorks.yFiles.Algorithms.Edge" />s in the <see cref="P:yWorks.yFiles.UI.Model.YGraphAdapter.YGraph" />.
+            </summary>
+      <param name="mapperDelegate">The mapper delegate to direct read requests to.</param>
+      <typeparam name="V">The type of the values in the mapper.</typeparam>
+      <returns>An <see cref="T:yWorks.yFiles.Algorithms.INodeMap" /> that will delegate reads to the <paramref name="mapperDelegate" />.</returns>
+      <remarks>
+            This method is useful where algorithms require <see cref="T:yWorks.yFiles.Algorithms.IEdgeMap" />s as input
+            and this can be mapped to a corresponding dynamic callback that 
+            provides the values for the <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetOriginalEdge(yWorks.yFiles.Algorithms.Edge)">original edges</see>.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.YGraphAdapter.CreateMapper``1(yWorks.yFiles.Algorithms.IDataProvider)">
+      <summary>
+            Creates an <see cref="T:yWorks.Canvas.Model.IMapper`2" /> that delegates to the provided <see cref="T:yWorks.yFiles.Algorithms.IDataProvider" />
+            when queried for items in the <see cref="T:yWorks.yFiles.UI.Model.IGraph" />.
+            </summary>
+      <param name="provider">The provider to direct requests to.</param>
+      <typeparam name="T">The type of the values in the mapper.</typeparam>
+      <returns>A mapper that will delegate requests to the <paramref name="provider" />.</returns>
+      <remarks>
+            This method is useful where algorithms yield <see cref="T:yWorks.yFiles.Algorithms.IDataProvider" />s 
+            and their values should be provided using <see cref="T:yWorks.Canvas.Model.IMapper`2" /> instances that 
+            use the <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetOriginalEdge(yWorks.yFiles.Algorithms.Edge)">original edges</see> and
+            the <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetOriginalNode(yWorks.yFiles.Algorithms.Node)">original nodes</see>.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.YGraphAdapter.CreateMapper``1(yWorks.yFiles.Algorithms.IEdgeMap)">
+      <summary>
+            Creates an <see cref="T:yWorks.Canvas.Model.IMapper`2" /> that delegates to the provided <see cref="T:yWorks.yFiles.Algorithms.IEdgeMap" />
+            when queried for items in the <see cref="T:yWorks.yFiles.UI.Model.IGraph" />.
+            </summary>
+      <param name="edgeMap">The map to direct requests to.</param>
+      <typeparam name="T">The type of the values in the mapper.</typeparam>
+      <returns>A mapper that will delegate requests to the <paramref name="edgeMap" />.</returns>
+      <remarks>
+            This method is useful where algorithms yield <see cref="T:yWorks.yFiles.Algorithms.IDataProvider" />s 
+            and their values should be provided using <see cref="T:yWorks.Canvas.Model.IMapper`2" /> instances that 
+            use the <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetOriginalEdge(yWorks.yFiles.Algorithms.Edge)">original edges</see>.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.YGraphAdapter.CreateMapper``1(yWorks.yFiles.Algorithms.INodeMap)">
+      <summary>
+            Creates an <see cref="T:yWorks.Canvas.Model.IMapper`2" /> that delegates to the provided <see cref="T:yWorks.yFiles.Algorithms.INodeMap" />
+            when queried for items in the <see cref="T:yWorks.yFiles.UI.Model.IGraph" />.
+            </summary>
+      <param name="nodeMap">The map to direct requests to.</param>
+      <typeparam name="T">The type of the values in the mapper.</typeparam>
+      <returns>A mapper that will delegate requests to the <paramref name="nodeMap" />.</returns>
+      <remarks>
+            This method is useful where algorithms yield <see cref="T:yWorks.yFiles.Algorithms.INodeMap" />s 
+            and their values should be provided using <see cref="T:yWorks.Canvas.Model.IMapper`2" /> instances that 
+            use the <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetOriginalNode(yWorks.yFiles.Algorithms.Node)">original nodes</see>.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.YGraphAdapter.CreateNodeEnumerable(yWorks.yFiles.Algorithms.NodeList)">
+      <summary>
+            Creates an <see cref="T:System.Collections.Generic.IEnumerable`1">enumerable of nodes</see> that
+            maps the nodes from the <see cref="T:yWorks.yFiles.Algorithms.NodeList" /> to their <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetOriginalNode(yWorks.yFiles.Algorithms.Node)">
+            original</see> ones.
+            </summary>
+      <param name="nl">The node list.</param>
+      <returns>An enumerable that contains the <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetOriginalNode(yWorks.yFiles.Algorithms.Node)">original</see> nodes
+            for the ones in the list.</returns>
+      <remarks>
+            This method is useful where algorithms yield <see cref="T:yWorks.yFiles.Algorithms.NodeList" /> instances
+            as results and the result needs to be interpreted in terms of
+            the <see cref="P:yWorks.yFiles.UI.Model.YGraphAdapter.OriginalGraph" />.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.YGraphAdapter.CreateNodeList(System.Collections.Generic.IEnumerable{yWorks.yFiles.UI.Model.INode})">
+      <summary>
+            Creates a <see cref="T:yWorks.yFiles.Algorithms.NodeList" /> that
+            maps the nodes from the <see cref="T:System.Collections.Generic.IEnumerable`1" /> to their <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetCopiedNode(yWorks.yFiles.UI.Model.INode)">
+            copied</see> ones.
+            </summary>
+      <param name="nl">The nodes from the <see cref="P:yWorks.yFiles.UI.Model.YGraphAdapter.OriginalGraph" />.</param>
+      <returns>A <see cref="T:yWorks.yFiles.Algorithms.NodeList" /> that contains the <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetCopiedNode(yWorks.yFiles.UI.Model.INode)">copied</see> nodes
+            for the ones in the enumerable.</returns>
+      <remarks>
+            This method is useful where algorithms require <see cref="T:yWorks.yFiles.Algorithms.NodeList" /> instances
+            as input and those nodes are available as <see cref="T:System.Collections.Generic.IEnumerable`1" />s in 
+            the <see cref="P:yWorks.yFiles.UI.Model.YGraphAdapter.OriginalGraph" />.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.YGraphAdapter.CreateNodeMap``1(yWorks.Canvas.Model.IMapper{yWorks.yFiles.UI.Model.INode,``0})">
+      <summary>
+            Creates an <see cref="T:yWorks.yFiles.Algorithms.INodeMap" /> that delegates to the provided <see cref="T:yWorks.Canvas.Model.IMapper`2" />
+            when queried for <see cref="T:yWorks.yFiles.Algorithms.Node" />s in the <see cref="P:yWorks.yFiles.UI.Model.YGraphAdapter.YGraph" />.
+            </summary>
+      <param name="mapper">The mapper to direct requests to.</param>
+      <typeparam name="V">The type of the values in the mapper.</typeparam>
+      <returns>An <see cref="T:yWorks.yFiles.Algorithms.INodeMap" /> that will delegate reads and writes to the <paramref name="mapper" />.</returns>
+      <remarks>
+            This method is useful where algorithms require <see cref="T:yWorks.yFiles.Algorithms.INodeMap" />s as input
+            and this can be mapped to corresponding <see cref="T:yWorks.Canvas.Model.IMapper`2" /> instances that 
+            provide and accept the values for the <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetOriginalNode(yWorks.yFiles.Algorithms.Node)">original nodes</see>.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.YGraphAdapter.CreateNodeMap``1(yWorks.Canvas.Model.MapperDelegate{yWorks.yFiles.UI.Model.INode,``0})">
+      <summary>
+            Creates an <see cref="T:yWorks.yFiles.Algorithms.INodeMap" /> that delegates to the provided delegate
+            when queried for <see cref="T:yWorks.yFiles.Algorithms.Node" />s in the <see cref="P:yWorks.yFiles.UI.Model.YGraphAdapter.YGraph" />.
+            </summary>
+      <param name="mapperDelegate">The mapper delegate to direct read requests to.</param>
+      <typeparam name="V">The type of the values in the mapper.</typeparam>
+      <returns>An <see cref="T:yWorks.yFiles.Algorithms.INodeMap" /> that will delegate reads to the <paramref name="mapperDelegate" />.</returns>
+      <remarks>
+            This method is useful where algorithms require <see cref="T:yWorks.yFiles.Algorithms.INodeMap" />s as input
+            and this can be mapped to a corresponding dynamic callback that 
+            provides the values for the <see cref="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetOriginalNode(yWorks.yFiles.Algorithms.Node)">original nodes</see>.
+            </remarks>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetCopiedEdge(yWorks.yFiles.UI.Model.IEdge)">
+      <summary>
+            Yields the edge that has been created as a copy in <see cref="P:yWorks.yFiles.UI.Model.YGraphAdapter.YGraph" /> to
+            represent the given edge.
+            </summary>
+      <param name="e">The edge for which the representation is returned.</param>
+      <returns>The edge that represents <paramref name="e" /> in <see cref="P:yWorks.yFiles.UI.Model.YGraphAdapter.YGraph" />.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetCopiedNode(yWorks.yFiles.UI.Model.INode)">
+      <summary>
+            Yields the node that has been created as a copy in <see cref="P:yWorks.yFiles.UI.Model.YGraphAdapter.YGraph" /> to
+            represent the given node.
+            </summary>
+      <param name="n">The node for which the representation is returned.</param>
+      <returns>The node that represents <paramref name="n" /> in <see cref="P:yWorks.yFiles.UI.Model.YGraphAdapter.YGraph" />.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetOriginalEdge(yWorks.yFiles.Algorithms.Edge)">
+      <summary>
+            Yields the original edge from the <see cref="P:yWorks.yFiles.UI.Model.YGraphAdapter.OriginalGraph">original IGraph</see>.
+            that the given edge has been created for.
+            </summary>
+      <param name="e">The edge for which the original instance will be returned.</param>
+      <returns>The original instance.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.UI.Model.YGraphAdapter.GetOriginalNode(yWorks.yFiles.Algorithms.Node)">
+      <summary>
+            Yields the original node from the <see cref="P:yWorks.yFiles.UI.Model.YGraphAdapter.OriginalGraph">original IGraph</see>.
+            that the given node has been created for.
+            </summary>
+      <param name="n">The node for which the original instance will be returned.</param>
+      <returns>The original instance.</returns>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.YGraphAdapter.OriginalGraph">
+      <summary>
+            Gets the original graph instance.
+            </summary>
+    </member>
+    <member name="P:yWorks.yFiles.UI.Model.YGraphAdapter.YGraph">
+      <summary>
+            Gets the graph instance that is created during the constructor call.
+            </summary>
+    </member>
+    <member name="T:yWorks.yFiles.Util.Geom.GeomExtensions">
+      <summary>
+            Extension method holder class with utility conversion methods for geometry structs
+            like <see cref="T:yWorks.Canvas.Geometry.Structs.PointD" /> and <see cref="T:yWorks.Canvas.Geometry.Structs.RectD" />.
+            </summary>
+    </member>
+    <member name="M:yWorks.yFiles.Util.Geom.GeomExtensions.ToImmutableOrientedRectangle(yWorks.yFiles.Algorithms.Geometry.YOrientedRectangle)">
+      <summary>
+            Creates an immutable <see cref="T:yWorks.Canvas.Geometry.IOrientedRectangle" /> from a given <see cref="T:yWorks.yFiles.Algorithms.Geometry.YOrientedRectangle" />.
+            </summary>
+      <param name="rect">The <see cref="T:yWorks.yFiles.Algorithms.Geometry.YOrientedRectangle" />.</param>
+      <returns>The <see cref="T:yWorks.Canvas.Geometry.IOrientedRectangle" />.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.Util.Geom.GeomExtensions.ToInsets(yWorks.Canvas.Geometry.Structs.InsetsD)">
+      <summary>
+            Creates a <see cref="T:yWorks.yFiles.Util.Geom.Insets" /> from a given <see cref="T:yWorks.Canvas.Geometry.Structs.InsetsD" />.
+            </summary>
+      <param name="insetsD">The <see cref="T:yWorks.Canvas.Geometry.Structs.InsetsD" />.</param>
+      <returns>The <see cref="T:yWorks.Canvas.Geometry.Structs.InsetsD" />.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.Util.Geom.GeomExtensions.ToInsetsD(yWorks.yFiles.Util.Geom.Insets)">
+      <summary>
+            Creates a <see cref="T:yWorks.Canvas.Geometry.Structs.InsetsD" /> from a given <see cref="T:yWorks.yFiles.Util.Geom.Insets" />.
+            </summary>
+      <param name="insets">The <see cref="T:yWorks.yFiles.Util.Geom.Insets" />.</param>
+      <returns>The <see cref="T:yWorks.Canvas.Geometry.Structs.InsetsD" />.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.Util.Geom.GeomExtensions.ToOrientedRectangle(yWorks.Canvas.Geometry.IOrientedRectangle)">
+      <summary>
+            Creates a <see cref="T:yWorks.yFiles.Algorithms.Geometry.YOrientedRectangle" /> from a given <see cref="T:yWorks.Canvas.Geometry.IOrientedRectangle" />.
+            </summary>
+      <param name="rect">The <see cref="T:yWorks.Canvas.Geometry.Structs.RectD" />.</param>
+      <returns>The <see cref="T:yWorks.yFiles.Algorithms.Geometry.YOrientedRectangle" />.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.Util.Geom.GeomExtensions.ToPoint2D(yWorks.Canvas.Geometry.Structs.PointD)">
+      <summary>
+            Creates a <see cref="T:yWorks.yFiles.Util.Geom.Point2D.Double" /> from a given <see cref="T:yWorks.Canvas.Geometry.Structs.PointD" />.
+            </summary>
+      <param name="point">The <see cref="T:yWorks.Canvas.Geometry.Structs.PointD" />.</param>
+      <returns>The <see cref="T:yWorks.yFiles.Util.Geom.Point2D.Double" />.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.Util.Geom.GeomExtensions.ToPointD(yWorks.yFiles.Algorithms.Geometry.YPoint)">
+      <summary>
+            Creates a <see cref="T:yWorks.Canvas.Geometry.Structs.PointD" /> from a given <see cref="T:yWorks.yFiles.Algorithms.Geometry.YPoint" />.
+            </summary>
+      <param name="point">The <see cref="T:yWorks.yFiles.Algorithms.Geometry.YPoint" />.</param>
+      <returns>The <see cref="T:yWorks.Canvas.Geometry.Structs.PointD" />.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.Util.Geom.GeomExtensions.ToPointD(yWorks.yFiles.Algorithms.Geometry.YVector)">
+      <summary>
+            Creates a <see cref="T:yWorks.Canvas.Geometry.Structs.PointD" /> from a given <see cref="T:yWorks.yFiles.Algorithms.Geometry.YVector" />.
+            </summary>
+      <param name="point">The <see cref="T:yWorks.yFiles.Algorithms.Geometry.YVector" />.</param>
+      <returns>The <see cref="T:yWorks.Canvas.Geometry.Structs.PointD" />.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.Util.Geom.GeomExtensions.ToPointD(yWorks.yFiles.Util.Geom.Point2D)">
+      <summary>
+            Creates a <see cref="T:yWorks.Canvas.Geometry.Structs.PointD" /> from a given <see cref="T:yWorks.yFiles.Util.Geom.Point2D" />.
+            </summary>
+      <param name="point">The <see cref="T:yWorks.yFiles.Util.Geom.Point2D" />.</param>
+      <returns>The <see cref="T:yWorks.Canvas.Geometry.Structs.PointD" />.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.Util.Geom.GeomExtensions.ToRectangle(yWorks.Canvas.Geometry.Structs.RectD)">
+      <summary>
+            Creates a <see cref="T:yWorks.yFiles.Util.Geom.Rectangle" /> from a given <see cref="T:yWorks.Canvas.Geometry.Structs.RectD" />.
+            </summary>
+      <param name="rect">The <see cref="T:yWorks.Canvas.Geometry.Structs.RectD" />.</param>
+      <returns>The <see cref="T:yWorks.yFiles.Util.Geom.Rectangle" />.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.Util.Geom.GeomExtensions.ToRectangle2D(yWorks.Canvas.Geometry.Structs.RectD)">
+      <summary>
+            Creates a <see cref="T:yWorks.yFiles.Util.Geom.Rectangle2D.Double">Rectangle2D.Double</see> from a given <see cref="T:yWorks.Canvas.Geometry.Structs.RectD" />.
+            </summary>
+      <param name="rect">The <see cref="T:yWorks.Canvas.Geometry.Structs.RectD" />.</param>
+      <returns>The <see cref="T:yWorks.yFiles.Util.Geom.Rectangle2D.Double">Rectangle2D.Double</see>.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.Util.Geom.GeomExtensions.ToRectD(yWorks.yFiles.Algorithms.Geometry.YRectangle)">
+      <summary>
+            Creates a <see cref="T:yWorks.Canvas.Geometry.Structs.RectD" /> from a given <see cref="T:yWorks.yFiles.Algorithms.Geometry.YRectangle" />.
+            </summary>
+      <param name="rect">The <see cref="T:yWorks.yFiles.Algorithms.Geometry.YRectangle" />.</param>
+      <returns>The <see cref="T:yWorks.Canvas.Geometry.Structs.RectD" />.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.Util.Geom.GeomExtensions.ToRectD(yWorks.yFiles.Util.Geom.Rectangle)">
+      <summary>
+            Creates a <see cref="T:yWorks.Canvas.Geometry.Structs.RectD" /> from a given <see cref="T:yWorks.yFiles.Util.Geom.Rectangle" />.
+            </summary>
+      <param name="rect">The <see cref="T:yWorks.yFiles.Util.Geom.Rectangle" />.</param>
+      <returns>The <see cref="T:yWorks.Canvas.Geometry.Structs.RectD" />.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.Util.Geom.GeomExtensions.ToRectD(yWorks.yFiles.Util.Geom.Rectangle2D)">
+      <summary>
+            Creates a <see cref="T:yWorks.Canvas.Geometry.Structs.RectD" /> from a given <see cref="T:yWorks.yFiles.Util.Geom.Rectangle2D" />.
+            </summary>
+      <param name="rect">The <see cref="T:yWorks.yFiles.Util.Geom.Rectangle2D" />.</param>
+      <returns>The <see cref="T:yWorks.Canvas.Geometry.Structs.RectD" />.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.Util.Geom.GeomExtensions.ToSizeD(yWorks.yFiles.Algorithms.Geometry.YDimension)">
+      <summary>
+            Creates a <see cref="T:yWorks.Canvas.Geometry.Structs.SizeD" /> from a given <see cref="T:yWorks.yFiles.Algorithms.Geometry.YDimension" />.
+            </summary>
+      <param name="dimension">The <see cref="T:yWorks.yFiles.Algorithms.Geometry.YDimension" />.</param>
+      <returns>The <see cref="T:yWorks.Canvas.Geometry.Structs.SizeD" />.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.Util.Geom.GeomExtensions.ToYDimension(yWorks.Canvas.Geometry.Structs.SizeD)">
+      <summary>
+            Creates a <see cref="T:yWorks.yFiles.Algorithms.Geometry.YDimension" /> from a given <see cref="T:yWorks.Canvas.Geometry.Structs.SizeD" />.
+            </summary>
+      <param name="sizeD">The <see cref="T:yWorks.Canvas.Geometry.Structs.SizeD" />.</param>
+      <returns>The <see cref="T:yWorks.yFiles.Algorithms.Geometry.YDimension" />.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.Util.Geom.GeomExtensions.ToYPoint(yWorks.Canvas.Geometry.Structs.PointD)">
+      <summary>
+            Creates a <see cref="T:yWorks.yFiles.Algorithms.Geometry.YPoint" /> from a given <see cref="T:yWorks.Canvas.Geometry.Structs.PointD" />.
+            </summary>
+      <param name="point">The <see cref="T:yWorks.Canvas.Geometry.Structs.PointD" />.</param>
+      <returns>The <see cref="T:yWorks.yFiles.Algorithms.Geometry.YPoint" />.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.Util.Geom.GeomExtensions.ToYRectangle(yWorks.Canvas.Geometry.Structs.RectD)">
+      <summary>
+            Creates a <see cref="T:yWorks.yFiles.Algorithms.Geometry.YRectangle" /> from a given <see cref="T:yWorks.Canvas.Geometry.Structs.RectD" />.
+            </summary>
+      <param name="rect">The <see cref="T:yWorks.Canvas.Geometry.Structs.RectD" />.</param>
+      <returns>The <see cref="T:yWorks.yFiles.Algorithms.Geometry.YRectangle" />.</returns>
+    </member>
+    <member name="M:yWorks.yFiles.Util.Geom.GeomExtensions.ToYVector(yWorks.Canvas.Geometry.Structs.PointD)">
+      <summary>
+            Creates a <see cref="T:yWorks.yFiles.Algorithms.Geometry.YVector" /> from a given <see cref="T:yWorks.Canvas.Geometry.Structs.PointD" />.
+            </summary>
+      <param name="point">The <see cref="T:yWorks.Canvas.Geometry.Structs.PointD" />.</param>
+      <returns>The <see cref="T:yWorks.yFiles.Algorithms.Geometry.YVector" />.</returns>
+    </member>
+  </members>
+</doc>

@@ -52,7 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="AboutAction.cs" />
+    <Compile Include="Actions\AboutAction.cs" />
     <Compile Include="ReverseStringAction.cs" />
     <Compile Include="Settings\UseDefaultAssemblyVersioning.cs" />
   </ItemGroup>
@@ -61,7 +61,7 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Actions.xml" />
+    <EmbeddedResource Include="Actions\Actions.xml" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
