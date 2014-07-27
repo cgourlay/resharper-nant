@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Actions\AboutAction.cs" />
+    <Compile Include="QuickFix\DefaultTargetBulbItem.cs" />
     <Compile Include="ReverseStringAction.cs" />
     <Compile Include="Settings\UseDefaultAssemblyVersioning.cs" />
   </ItemGroup>
