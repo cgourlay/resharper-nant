@@ -1,0 +1,4 @@
+C:\Users\Colin\Desktop\MyGitHub\resharper-nant\src\ReSharperNant\ReSharperNant\ReSharperNant\bin\Debug\ReSharperNant.dll
+C:\Users\Colin\Desktop\MyGitHub\resharper-nant\src\ReSharperNant\ReSharperNant\ReSharperNant\bin\Debug\ReSharperNant.pdb
+C:\Users\Colin\Desktop\MyGitHub\resharper-nant\src\ReSharperNant\ReSharperNant\ReSharperNant\obj\Debug\ReSharperNant.dll
+C:\Users\Colin\Desktop\MyGitHub\resharper-nant\src\ReSharperNant\ReSharperNant\ReSharperNant\obj\Debug\ReSharperNant.pdb
