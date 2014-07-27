@@ -7,6 +7,7 @@ What does it do?
 ================
 
 Provides context actions whilst authoring NAnt build scripts.
+Defines a default assembly versioning mechanism.
 
 System requirements
 ===================
